@@ -285,6 +285,7 @@ from pygments.lexers.c_cpp import CLexer, CppLexer
 from pygments.lexer import RegexLexer, include, bygroups, using, this, inherit, default, words
 from pygments.token import Name, Keyword, Comment, Text, Operator, String, Number, Punctuation, Error
 from sphinx.highlighting import lexers
+from pygments.formatters import HtmlFormatter
 
 #####
 class NedLexer(RegexLexer):
@@ -422,10 +423,21 @@ lexers['ini'] = IniLexer(startinline=True)
 
 #######################################################################
 
+from pygments.style import Style
+from pygments.token import Keyword, Name, Comment, String, Error, \
+     Number, Operator, Generic, Whitespace
+
+class FpStyle(Style):
+	default_style = "default"
+	style = {
+		Text:	'#ffffff'
+}
+
 class FingerprintLexer(RegexLexer):
     name = 'fp'
     filenames = ['*.fp']
     mimetypes = ['text/x-fp']
+    pygments_style = "FpStyle"
 
     tokens = {
         'root': [
@@ -433,8 +445,8 @@ class FingerprintLexer(RegexLexer):
             #(r'PASS', Keyword),
             #(r'FAILED', String),
 	    (r'(.*: )(PASS)?(FAILED)?',
-             bygroups(Text, Name.Builtin, String)),
-	    (r'.*?\n', Text),
+             bygroups(Name.Entity, Name.Builtin, String)),
+	    (r'.*?\n', Name.Entity),
         ],
     }
 
